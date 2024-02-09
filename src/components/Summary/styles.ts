@@ -11,6 +11,7 @@ export const SummaryContainer = styled.section`
     gap: 2rem;
 
     margin-top: -5rem;
+    margin-bottom: 4rem;
 `
 
 interface SummaryCardsProps {
