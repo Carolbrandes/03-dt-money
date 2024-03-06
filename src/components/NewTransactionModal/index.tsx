@@ -1,6 +1,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import * as S from "./styles";
 
@@ -8,13 +8,14 @@ const newTransactionFormSchema = z.object({
   description: z.string(),
   price: z.number(),
   category: z.string(),
-  // type: z.enum(["income", "outcome"]),
+  type: z.enum(["income", "outcome"]),
 });
 
 type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>;
 
 export const NewTransactionModal = () => {
   const {
+    control,
     register,
     handleSubmit,
     formState: { isSubmitting },
@@ -57,17 +58,24 @@ export const NewTransactionModal = () => {
               {...register("category")}
             />
 
-            <S.TransactionType>
-              <S.TransactionTypeButton variant="income" value="income">
-                <ArrowCircleUp size={24} />
-                Entrada
-              </S.TransactionTypeButton>
-
-              <S.TransactionTypeButton variant="outcome" value="outcome">
-                <ArrowCircleDown size={24} />
-                Saída
-              </S.TransactionTypeButton>
-            </S.TransactionType>
+           <Controller control={control} name="type" render={({field}) => {
+            console.log("🚀 ~ NewTransactionModal ~ field:", field)
+            
+              return (
+                <S.TransactionType value={field.value} onValueChange={field.onChange}>
+                <S.TransactionTypeButton variant="income" value="income">
+                  <ArrowCircleUp size={24} />
+                  Entrada
+                </S.TransactionTypeButton>
+   
+                <S.TransactionTypeButton variant="outcome" value="outcome">
+                  <ArrowCircleDown size={24} />
+                  Saída
+                </S.TransactionTypeButton>
+              </S.TransactionType>
+              )
+           }} />
+           
 
             <button type="submit" disabled={isSubmitting}>
               Cadastrar
