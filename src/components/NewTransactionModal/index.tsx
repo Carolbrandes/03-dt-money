@@ -60,7 +60,7 @@ export const NewTransactionModal = () => {
 
            <Controller control={control} name="type" render={({field}) => {
             console.log("🚀 ~ NewTransactionModal ~ field:", field)
-            
+
               return (
                 <S.TransactionType value={field.value} onValueChange={field.onChange}>
                 <S.TransactionTypeButton variant="income" value="income">
