@@ -1,38 +1,38 @@
-import * as Dialog from "@radix-ui/react-dialog";
-import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
-import { useContext } from "react";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
-import { TransactionContext } from "../../contexts/TransactionsContext";
-import * as S from "./styles";
+import * as Dialog from '@radix-ui/react-dialog'
+import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
+import { useContext } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { TransactionContext } from '../../contexts/TransactionsContext'
+import * as S from './styles'
 
 const newTransactionFormSchema = z.object({
   description: z.string(),
   price: z.number(),
   category: z.string(),
-  type: z.enum(["income", "outcome"]),
-});
+  type: z.enum(['income', 'outcome']),
+})
 
-type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>;
+type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
 export const NewTransactionModal = () => {
-  const {createTransaction} = useContext(TransactionContext)
+  const { createTransaction } = useContext(TransactionContext)
   const {
     control,
     register,
     handleSubmit,
     formState: { isSubmitting },
-    reset
-  } = useForm<NewTransactionFormInputs>();
+    reset,
+  } = useForm<NewTransactionFormInputs>()
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    const {description, price, category, type} = data
+    const { description, price, category, type } = data
 
     await createTransaction({
       description,
       price,
       category,
-      type
+      type,
     })
 
     reset()
@@ -55,39 +55,45 @@ export const NewTransactionModal = () => {
               type="text"
               placeholder="Descrição"
               required
-              {...register("description")}
+              {...register('description')}
             />
             <input
               type="number"
               placeholder="Preço"
               required
-              {...register("price", { valueAsNumber: true })}
+              {...register('price', { valueAsNumber: true })}
             />
             <input
               type="text"
               placeholder="Categoria"
               required
-              {...register("category")}
+              {...register('category')}
             />
 
-           <Controller control={control} name="type" render={({field}) => {
-            console.log("🚀 ~ NewTransactionModal ~ field:", field)
+            <Controller
+              control={control}
+              name="type"
+              render={({ field }) => {
+                console.log('🚀 ~ NewTransactionModal ~ field:', field)
 
-              return (
-                <S.TransactionType value={field.value} onValueChange={field.onChange}>
-                <S.TransactionTypeButton variant="income" value="income">
-                  <ArrowCircleUp size={24} />
-                  Entrada
-                </S.TransactionTypeButton>
-   
-                <S.TransactionTypeButton variant="outcome" value="outcome">
-                  <ArrowCircleDown size={24} />
-                  Saída
-                </S.TransactionTypeButton>
-              </S.TransactionType>
-              )
-           }} />
-           
+                return (
+                  <S.TransactionType
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <S.TransactionTypeButton variant="income" value="income">
+                      <ArrowCircleUp size={24} />
+                      Entrada
+                    </S.TransactionTypeButton>
+
+                    <S.TransactionTypeButton variant="outcome" value="outcome">
+                      <ArrowCircleDown size={24} />
+                      Saída
+                    </S.TransactionTypeButton>
+                  </S.TransactionType>
+                )
+              }}
+            />
 
             <button type="submit" disabled={isSubmitting}>
               Cadastrar
@@ -96,5 +102,5 @@ export const NewTransactionModal = () => {
         </S.Content>
       </Dialog.Portal>
     </>
-  );
-};
+  )
+}
